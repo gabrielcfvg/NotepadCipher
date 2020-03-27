@@ -5,8 +5,18 @@ from tkinter import filedialog as dialog
 import os
 
 
-local = r'/home/stalin/Desktop/projetos/Notepad_Cipher'
-editor_de_texto = 'mousepad'
+'''
+Coloque nas variavel "local" onde o diretorio de arquivos será criado, que seja de preferencia onde o programa está armazenado
+E na variavel "editor_de_texto" coloque o editor do seu sistema que será usado pra abrir os textos
+'''
+
+
+local = os.path.dirname(os.path.abspath(__file__))
+editor_de_texto = 'notepad'
+
+
+
+#==========================================================================
 
 def clear():
     system('cls' if os.name == 'nt' else 'clear')
@@ -33,16 +43,17 @@ def select():
         n1 += 1
     print('\n', '-'*30, sep='')
     
-    escolha = int(input("\nDigite o número referente ao arquivo desejado:\n"))-1
+    escolha = int(input("\nDigite o número referente ao arquivo desejado:\n"))
 
-    if escolha < 0 or escolha > n1:
+    print(n1)
+    if escolha < 1 or escolha >= n1:
         clear()
         print("Número invalido, tente novamente!")
         return select()
     
     else:
 
-        return files[escolha]   
+        return files[escolha-1]   
 
 def abrir(file, senha):
 
@@ -78,19 +89,19 @@ while True:
     print("="*20)
 
     print("\nOperações:\n\n",
-        "1 = Visualizar arquivo\n", 
-        "2 = Criar novo arquivo\n", 
-        "3 = Importar novo arquivo\n", 
-        "4 = Decriptar/Exportar arquivo existente\n",
-        "5 = Excluir arquivo\n\n",
-        "999 = Sair",
-        sep='')
+         "1 = Visualizar arquivo\n", 
+         "2 = Criar novo arquivo\n", 
+         "3 = Importar novo arquivo\n", 
+         "4 = Decriptar/Exportar arquivo existente\n",
+         "5 = Excluir arquivo\n\n",
+         "999 = Sair",
+         sep='')
 
-    operação = int(input("\nDigite a operação selecionada: "))
+    operação = input("\nDigite a operação selecionada: ")
     clear()
 
 
-    if operação == 1:
+    if operação == '1' or operação == '':
 
         saida = select()
 
@@ -102,14 +113,15 @@ while True:
             senha = input("Digite a senha que será utilizada para abrir o arquivo: ")
             abrir(saida, senha)
 
-    elif operação == 2:
+    elif operação == '2':
         clear()
 
         nome = input("Digite o nome do arquivo á ser criado: ")
         
         open(local+"/arquivos/"+nome+".txt", 'w', encoding='utf-8')
+        
 
-    elif operação == 3:
+    elif operação == '3':
         clear()
 
         arq = dialog.askopenfile()
@@ -127,37 +139,56 @@ while True:
 
                 saida.close()
                 entrada.close()
+
+        print("Arquivo importado com sucesso!!!\n")
         
-    elif operação == 4:
+    elif operação == '4':
         clear()
 
-        alvo = dialog.askdirectory()
+
         arq = select()
+        
+        if arq != 1:
+            
+            alvo = dialog.askdirectory()
 
-        senha = input("Digite a senha que será usada para criptografar o arquivo; ")
+            senha = input("Digite a senha que será usada para decriptar o arquivo; ")
 
-        with open(local+"/arquivos/"+arq, 'r', encoding='utf-8-sig') as entrada:
+            with open(local+"/arquivos/"+arq, 'r', encoding='utf-8-sig') as entrada:
 
-            with open(alvo+"/"+arq, 'w', encoding='utf-8') as saida:
+                with open(alvo+"/"+arq, 'w', encoding='utf-8') as saida:
 
-                saida.write(cipher(entrada.read(), senha, 2))
+                    saida.write(cipher(entrada.read(), senha, 2))
 
-                saida.close()
-                entrada.close()
+                    saida.close()
+                    entrada.close()
+
+            print("Arquivo exportado com sucesso!!!\n")
     
-    elif operação == 5:
+    elif operação == '5':
         clear()
 
         from random import randint
 
         arq = select()
-        con = randint(100, 1000)
-        if int(input(f"Digite o número {con} para confirmar: ")) == con:
-            os.remove(local+"/arquivos/"+arq)
+            
+        if arq != 1:
+            con = randint(100, 1000)
+            if int(input(f"Digite o número {con} para confirmar: ")) == con:
+                os.remove(local+"/arquivos/"+arq)
         
-        else:
-            print("Não foi possivel deletar")
+            else:
+                print("Não foi possivel deletar")
 
 
-    if input("Deseja continuar?\n\n1 = Não\n2 = Sim\n\n") == '1':
+    elif operação == '999':
+        clear()
+        sys_exit()
+
+    else:
+        continue
+    
+    
+    if input("Deseja continuar?\n\n1 = Sim\n2 = Não\n\n") == '2':
+        clear()
         break
