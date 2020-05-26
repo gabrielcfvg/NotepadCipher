@@ -1,12 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'untitled.ui'
-#
-# Created by: PyQt5 UI code generator 5.13.2
-#
-# WARNING! All changes made in this file will be lost!
-
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from LoginWindow import Ui_LoginWindow
 from MainWindow import Ui_MainWindow
@@ -17,12 +8,22 @@ import pickle
 import hashlib
 from base64 import b64decode, b64encode
 
+##################################################################################################################
+#                                                                                                                #
+#                                    Declaração de variaveis e constantes                                        #
+#                                                                                                                #
+##################################################################################################################
+
 sqlite_crud.conectar("database.db")
 SENHA = ''
 OBJETO_USUARIO = None
 logado = False
 
-
+##################################################################################################################
+#                                                                                                                #
+#                                             Funções e Classes                                                  #
+#                                                                                                                #
+##################################################################################################################
 
 class User:
 
@@ -84,8 +85,6 @@ class JanelaPrincipal(Ui_MainWindow):
         self.button_salvar.clicked.connect(lambda: print(OBJETO_USUARIO.textos))
 
 
-
-
 class Funções:
 
     @staticmethod
@@ -131,18 +130,24 @@ class Funções:
             return 0
 
 
-
+##################################################################################################################
+#                                                                                                                #
+#                                             Programa principal                                                 #
+#                                                                                                                #
+##################################################################################################################
 
 
 
 
 if __name__ == "__main__":
+   
     import sys
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = JanelaLogin(MainWindow)
     MainWindow.show()
     app.exec_()
+    
     if logado:
         app2 = QtWidgets.QApplication(sys.argv)
         MainWindow = QtWidgets.QMainWindow()
