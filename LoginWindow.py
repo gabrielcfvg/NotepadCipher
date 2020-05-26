@@ -80,5 +80,3 @@ class Ui_LoginWindow(object):
         self.radioButton_login.setText(_translate("MainWindow", "Login"))
         self.radioButton_cadastro.setText(_translate("MainWindow", "Cadastro"))
         self.label_logo.setText(_translate("MainWindow", "Notepad Cipher"))
-
-

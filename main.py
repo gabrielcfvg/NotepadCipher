@@ -42,7 +42,6 @@ class JanelaLogin(Ui_LoginWindow):
         self.radioButton_login.setChecked(True)
         self.button_login.clicked.connect(self.login)
 
-    
     def login(self):
 
         if all([self.line_nome.text(), self.line_senha.text()]):
@@ -54,7 +53,6 @@ class JanelaLogin(Ui_LoginWindow):
 
         if self.radioButton_login.isChecked():
             res = Funções.login(nome, senha)
-            print(res)
 
             if res == 0:
                 global logado
@@ -69,7 +67,6 @@ class JanelaLogin(Ui_LoginWindow):
         else:
             
             res = Funções.cadastro(nome, senha)
-            print(res)
 
             if res == 0:
                 self.label.setText("Cadastrado com sucesso!!")
@@ -83,6 +80,16 @@ class JanelaPrincipal(Ui_MainWindow):
         super().setupUi(MainWindow)
 
         self.button_salvar.clicked.connect(lambda: print(OBJETO_USUARIO.textos))
+
+   ''' 
+    def add_button(self):
+
+    
+    def load(self):
+
+        for A in OBJETO_USUARIO.textos:'''
+
+
 
 
 class Funções:
@@ -129,7 +136,6 @@ class Funções:
 
             return 0
 
-
 ##################################################################################################################
 #                                                                                                                #
 #                                             Programa principal                                                 #
@@ -137,14 +143,14 @@ class Funções:
 ##################################################################################################################
 
 
-
-
 if __name__ == "__main__":
-   
+    import types
     import sys
+    
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = JanelaLogin(MainWindow)
+    #MainWindow.closeEvent = types.MethodType(saida, MainWindow)
     MainWindow.show()
     app.exec_()
     
