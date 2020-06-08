@@ -197,7 +197,14 @@ class JanelaPrincipal(Ui_MainWindow):
             TEXTOS[self.activetext].atualizar(self.textEdit.toPlainText())
             TEXTOS[self.activetext].salvar()
             
-            open(f"./saves/{self.activetext}.txt", 'w', encoding="utf-8").write(cipherdef.cipher(self.textEdit.toPlainText(), SENHA, 1))
+
+            seed(len(self.activetext))
+            from random import shuffle
+            tmp = [str(ord(A)) for A in self.activetext]+[str(A) for A in range(10)]
+            shuffle(tmp)
+            open(f"./saves/{''.join(tmp)}.txt", 'w', encoding="utf-8").write(cipherdef.cipher(self.textEdit.toPlainText(), SENHA, 1))
+            seed(time())
+
 
     #ok
     def carregar_textos(self):
