@@ -63,7 +63,7 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>211</width>
+      <width>151</width>
       <height>41</height>
      </rect>
     </property>
@@ -168,10 +168,10 @@
      <string notr="true">background-color: rgb(197, 197, 197);</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="button_config">
+   <widget class="QPushButton" name="button_this">
     <property name="geometry">
      <rect>
-      <x>230</x>
+      <x>170</x>
       <y>10</y>
       <width>51</width>
       <height>41</height>
@@ -181,7 +181,7 @@
      <string notr="true">background-color: rgb(76, 84, 86);</string>
     </property>
     <property name="text">
-     <string>conf</string>
+     <string>This</string>
     </property>
    </widget>
    <widget class="QPushButton" name="button_excluir">
@@ -200,10 +200,31 @@
      <string>exc</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="button_uti2">
+   <widget class="QLabel" name="text_estado">
     <property name="geometry">
      <rect>
       <x>760</x>
+      <y>10</y>
+      <width>151</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button_config">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
       <y>10</y>
       <width>51</width>
       <height>41</height>
@@ -213,7 +234,7 @@
      <string notr="true">background-color: rgb(76, 84, 86);</string>
     </property>
     <property name="text">
-     <string>uti2</string>
+     <string>Conf</string>
     </property>
    </widget>
   </widget>

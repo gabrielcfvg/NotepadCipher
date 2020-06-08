@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'modelos\formMainWindow.ui'
+# Form implementation generated from reading ui file '.\formMainWindow.ui'
 #
 # Created by: PyQt5 UI code generator 5.13.2
 #
@@ -29,7 +29,7 @@ class Ui_MainWindow(object):
         self.widget_2.setStyleSheet("background-color: rgb(0, 0, 2);")
         self.widget_2.setObjectName("widget_2")
         self.button_criar = QtWidgets.QPushButton(self.centralwidget)
-        self.button_criar.setGeometry(QtCore.QRect(10, 10, 211, 41))
+        self.button_criar.setGeometry(QtCore.QRect(10, 10, 151, 41))
         self.button_criar.setStyleSheet("background-color: rgb(76, 84, 86);")
         self.button_criar.setDefault(False)
         self.button_criar.setFlat(False)
@@ -67,18 +67,26 @@ class Ui_MainWindow(object):
         self.textEdit.setFont(font)
         self.textEdit.setStyleSheet("background-color: rgb(197, 197, 197);")
         self.textEdit.setObjectName("textEdit")
-        self.button_config = QtWidgets.QPushButton(self.centralwidget)
-        self.button_config.setGeometry(QtCore.QRect(230, 10, 51, 41))
-        self.button_config.setStyleSheet("background-color: rgb(76, 84, 86);")
-        self.button_config.setObjectName("button_config")
+        self.button_this = QtWidgets.QPushButton(self.centralwidget)
+        self.button_this.setGeometry(QtCore.QRect(170, 10, 51, 41))
+        self.button_this.setStyleSheet("background-color: rgb(76, 84, 86);")
+        self.button_this.setObjectName("button_this")
         self.button_excluir = QtWidgets.QPushButton(self.centralwidget)
         self.button_excluir.setGeometry(QtCore.QRect(700, 10, 51, 41))
         self.button_excluir.setStyleSheet("background-color: rgb(76, 84, 86);")
         self.button_excluir.setObjectName("button_excluir")
-        self.button_uti2 = QtWidgets.QPushButton(self.centralwidget)
-        self.button_uti2.setGeometry(QtCore.QRect(760, 10, 51, 41))
-        self.button_uti2.setStyleSheet("background-color: rgb(76, 84, 86);")
-        self.button_uti2.setObjectName("button_uti2")
+        self.text_estado = QtWidgets.QLabel(self.centralwidget)
+        self.text_estado.setGeometry(QtCore.QRect(760, 10, 151, 41))
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.text_estado.setFont(font)
+        self.text_estado.setText("")
+        self.text_estado.setAlignment(QtCore.Qt.AlignCenter)
+        self.text_estado.setObjectName("text_estado")
+        self.button_config = QtWidgets.QPushButton(self.centralwidget)
+        self.button_config.setGeometry(QtCore.QRect(230, 10, 51, 41))
+        self.button_config.setStyleSheet("background-color: rgb(76, 84, 86);")
+        self.button_config.setObjectName("button_config")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -91,6 +99,8 @@ class Ui_MainWindow(object):
         self.name_view.setText(_translate("MainWindow", "Arquivo:"))
         self.name_label.setText(_translate("MainWindow", "TextLabel"))
         self.button_salvar.setText(_translate("MainWindow", "salvar"))
-        self.button_config.setText(_translate("MainWindow", "conf"))
+        self.button_this.setText(_translate("MainWindow", "This"))
         self.button_excluir.setText(_translate("MainWindow", "exc"))
-        self.button_uti2.setText(_translate("MainWindow", "uti2"))
+        self.button_config.setText(_translate("MainWindow", "Conf"))
+
+

@@ -31,6 +31,7 @@ class Ui_LoginWindow(object):
         self.line_senha.setGeometry(QtCore.QRect(50, 280, 221, 31))
         self.line_senha.setStyleSheet("background-color: rgb(195, 195, 195);\nborder: 1px solid black\n")
         self.line_senha.setObjectName("line_senha")
+        self.line_senha.setEchoMode(QtWidgets.QLineEdit.Password)
         self.button_login = QtWidgets.QPushButton(self.centralwidget)
         self.button_login.setGeometry(QtCore.QRect(50, 360, 221, 61))
         self.button_login.setStyleSheet("background-color: rgb(76, 84, 86);")

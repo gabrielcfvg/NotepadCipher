@@ -1,12 +1,16 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from LoginWindow import Ui_LoginWindow
 from MainWindow import Ui_MainWindow
+from NewFileDialog import Ui_Dialog
+from ConfirmDialog import Ui_Dialog as Ui_confirm
 
 import dependencias.sqlite_crud as sqlite_crud
 import dependencias.cipherdef as cipherdef
 import pickle
 import hashlib
 from base64 import b64decode, b64encode
+from random import randint, seed
+from time import time
 
 ##################################################################################################################
 #                                                                                                                #
@@ -31,8 +35,6 @@ TEXTOS = {}
 class User:
 
     def __init__(self):
-
-        from random import randint
         
         self.textos = {"exemplo": f"texto de exemplo!\n{randint(1, 999999999)}"}
     
@@ -47,6 +49,9 @@ class Texto:
         self.nome = nome
         self.texto = texto
         self.salvo = True
+
+        if not nome in OBJETO_USUARIO.textos:
+            OBJETO_USUARIO.textos[nome] = texto
     
     def atualizar(self, texto):
         self.texto = texto
@@ -59,6 +64,62 @@ class Texto:
     def delete(self):
 
         del OBJETO_USUARIO.textos[self.nome]
+
+
+class DialogNewWindow(Ui_Dialog):
+
+    def __init__(self, Dialog):
+        super().setupUi(Dialog)
+
+        self.dia = Dialog
+        self.button_cancelar.clicked.connect(self.dia.done)
+        self.button_ok.clicked.connect(self.bt)
+
+    def bt(self):
+
+        cont = self.lineEdit.text()
+
+        if len(cont) == 0:
+            self.label_nomeemuso.setText("Campo vazio!")
+
+        elif cont in TEXTOS:
+
+            self.label_nomeemuso.setText("Nome em uso!")
+
+        else:
+            ui.criar_texto(cont)
+            self.dia.done(0)
+
+
+class ConfirmDialog(Ui_confirm):
+
+    def __init__(self, Dialog, nome, func):
+        super().setupUi(Dialog)
+
+        self.func = func
+        self.label_nome.setText(nome)
+        seed(time())
+        self.labe_num.setText(str(randint(100, 999)))
+        self.dia = Dialog
+
+        self.button_cancelar.clicked.connect(self.dia.done)
+        self.button_ok.clicked.connect(self.bt)
+
+    def bt(self):
+        
+        cont = self.lineEdit.text()
+
+        if cont.isalnum():
+
+            if int(cont) == int(self.labe_num.text()):
+                self.func()
+                self.dia.done(0)
+
+            else:
+                self.label_res.setText("Número errado!")
+
+        else:
+            self.label_res.setText("Número errado!")
 
 
 class JanelaLogin(Ui_LoginWindow):
@@ -106,26 +167,56 @@ class JanelaPrincipal(Ui_MainWindow):
     def __init__(self, MainWindow):
         super().setupUi(MainWindow)
 
+
         self.activetext = ''
-
+        self.text_estado.setText("")
+        
         self.carregar_textos()
-        self.textEdit.textChanged.connect(lambda: TEXTOS[self.activetext].atualizar(self.textEdit.toPlainText()))
-        self.button_salvar.clicked.connect(lambda: TEXTOS[self.activetext].salvar())
-        self.button_criar.clicked.connect(lambda: self.criar_texto())
+        self.textEdit.textChanged.connect(self.digitado)
+        
+        self.button_salvar.clicked.connect(self.salvar)
+        self.button_criar.clicked.connect(self.criar_texto_dialog)
+        self.button_excluir.clicked.connect(self.deletar_botao_dialog)
+        self.clear()
 
+    #ok
+    def digitado(self):
 
+        if self.activetext != None:
+            TEXTOS[self.activetext].atualizar(self.textEdit.toPlainText())
+            TEXTOS[self.activetext].salvo = False
+            self.text_estado.setText("Não salvo!")
+
+    #ok
+    def salvar(self):
+
+        if self.activetext != None:
+            TEXTOS[self.activetext].salvo = True
+            self.text_estado.setText("Salvo")
+            
+            TEXTOS[self.activetext].atualizar(self.textEdit.toPlainText())
+            TEXTOS[self.activetext].salvar()
+            
+            open(f"./saves/{self.activetext}.txt", 'w', encoding="utf-8").write(cipherdef.cipher(self.textEdit.toPlainText(), SENHA, 1))
+
+    #ok
     def carregar_textos(self):
 
         for A in TEXTOS:
             self.verticalLayout.addWidget(self.gerar_botão(A))
-            
+
+    #ok
     def layout_click(self, botão):
 
-        print("clicado", botão)
-        self.activetext = botão
+        self.activetext = None
         self.name_label.setText(botão)
         self.textEdit.setText(TEXTOS[botão].texto)
+        self.textEdit.setReadOnly(False)
+        
+        self.text_estado.setText("Salvo" if TEXTOS[botão].salvo == True else "Não salvo!")
+        self.activetext = botão
 
+    #ok
     def gerar_botão(self, nome):
 
         sizepolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Ignored, QtWidgets.QSizePolicy.Ignored)
@@ -139,18 +230,57 @@ class JanelaPrincipal(Ui_MainWindow):
         bt.id = nome
         return bt
 
-    def criar_texto(self, nome="NovoTexto"):
+    def criar_texto_dialog(self):
         
-        if nome in TEXTOS:
+        Dialog = QtWidgets.QDialog(MainWindow)
+        ui3 = DialogNewWindow(Dialog)
+        Dialog.exec()
+        
+        del Dialog, ui3
 
-            print("nome em uso")
-            return
-        
-        else:
+    #ok?
+    def criar_texto(self, nome="NovoTexto"):
 
             TEXTOS[nome] = Texto(nome, '')
-
             self.verticalLayout.addWidget(self.gerar_botão(nome))
+
+    def deletar_botao_dialog(self):
+
+        Dialog = QtWidgets.QDialog(MainWindow)
+        ui3 = ConfirmDialog(Dialog, "Confirmar exlusão", self.deletar_botão)
+        Dialog.exec()
+        
+        del Dialog, ui3
+
+    def deletar_botão(self):
+
+        for A in range(self.verticalLayout.count()):
+                    
+            if not self.verticalLayout.itemAt(A): continue
+
+            if self.activetext == self.verticalLayout.itemAt(A).widget().id:
+                self.verticalLayout.takeAt(A).widget().deleteLater()
+
+                TEXTOS[self.activetext].delete()
+                del TEXTOS[self.activetext]
+
+                if A > 0:
+                    self.layout_click(self.verticalLayout.itemAt(A-1).widget().id)
+                
+                elif self.verticalLayout.count()>0:
+                    self.layout_click(self.verticalLayout.itemAt(A).widget().id)
+               
+                else:
+                    self.clear()
+
+    #ok
+    def clear(self):
+
+        self.activetext = None
+        self.name_label.setText("")
+        self.textEdit.clear()
+        self.textEdit.setReadOnly(True)
+        self.text_estado.setText("")
 
 
 class Funções:
@@ -257,7 +387,6 @@ if __name__ == "__main__":
         MainWindow.show()
         app2.exec_()
         
-        print(OBJETO_USUARIO.textos)
         OBJETO_USUARIO.salvar()
 
 
